@@ -2,6 +2,6 @@
 
 struct Individual
 {
-    int amount;
-    int weight;
+    unsigned int productId;
+    unsigned int amount;
 };
