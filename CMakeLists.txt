@@ -8,19 +8,38 @@ project(WarehouseGeneticAlgorithm)
 set(GOOGLE_MOCK Libraries/gtest)
 set(SOURCES_DIR src)
 set(HEADERS_DIR inc)
+set(TESTS_DIR ut)
 
 include_directories(${HEADERS_DIR})
-add_subdirectory(${GOOGLE_MOCK})
+include_directories(${GOOGLE_MOCK}/googlemock/include)
+include_directories(${GOOGLE_MOCK}/googletest/include)
 
-add_executable(WarehouseOptimization ${SOURCES_DIR}/main.cpp)
+add_subdirectory(${GOOGLE_MOCK})
+add_subdirectory(${SOURCES_DIR})
+
+add_executable(WarehouseOptimizationTests ${TESTS_DIR}/PopulationTest.cpp
+              )
+
+target_link_libraries(WarehouseOptimizationTests Algorithm gmock_main)
+
+add_executable(WarehouseOptimization ${SOURCES_DIR}/main.cpp
+              )
+
+target_link_libraries(WarehouseOptimization Algorithm)
 
 add_custom_command(
-                   OUTPUT WarehouseOptimization
+                   OUTPUT WarehouseOptimizationTesting
+                   COMMAND WarehouseOptimizationTests
+                   DEPENDS WarehouseOptimizationTests
+                  )
+add_custom_command(
+                   OUTPUT WarehouseOptimizationRun
                    COMMAND WarehouseOptimization
                    DEPENDS WarehouseOptimization
                   )
 
 add_custom_target(
                   Run ALL
-                  DEPENDS WarehouseOptimization
+                  DEPENDS WarehouseOptimizationRun
+                          WarehouseOptimizationTesting
                  )

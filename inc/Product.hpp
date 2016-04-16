@@ -4,3 +4,4 @@ struct Product
 {
     unsigned int weight;
 };
+
