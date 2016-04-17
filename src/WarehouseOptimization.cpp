@@ -7,8 +7,7 @@ void WarehouseOptimization::generateProducts()
     products.clear();
     for (unsigned int i; i < config.maxTypesOfProducts; i++)
     {
-        unsigned int weight = static_cast<unsigned int>(getRandNumber(0, config.maxWeightOfItem));
+        unsigned int weight = static_cast<unsigned int>(Helpers::getRandNumber(0, config.maxWeightOfItem));
         products.push_back(Product{.weight=weight});
     }
 }
-

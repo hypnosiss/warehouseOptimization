@@ -1,3 +1,6 @@
 #pragma once
-
-int getRandNumber(unsigned int from, unsigned int to);
+class Helpers
+{
+    public:
+        static int getRandNumber(unsigned int from, unsigned int to);
+};

@@ -3,7 +3,7 @@
 #include <string>
 #include "Helpers.hpp"
 
-int getRandNumber(unsigned int from, unsigned int to)
+int Helpers::getRandNumber(unsigned int from, unsigned int to)
 {
     if (0 == to)
         throw std::string("You cannot divide by zero");
