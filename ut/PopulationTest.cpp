@@ -39,7 +39,7 @@ class PopulationTest: public testing::Test
 
 TEST_F(PopulationTest, DontGenerateEmptyPopulation)
 {
-    ASSERT_THROW(population.generatePopulation(0), std::string);
+    ASSERT_THROW(population.generate(0), std::string);
 }
 /*
 TEST_F(PopulationTest, GenerateNotEmptyPopulation)
@@ -51,7 +51,7 @@ TEST_F(PopulationTest, GenerateNotEmptyPopulation)
              .WillOnce(Return(amount));
     }
 
-    population.generatePopulation(amountOfPopulation);
+    population.generate(amountOfPopulation);
     
     for (unsigned int i = 0; i < amountOfPopulation; i++)
     {

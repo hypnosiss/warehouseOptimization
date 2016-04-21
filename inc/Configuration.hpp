@@ -2,7 +2,7 @@
 
 extern struct Configuration
 {
-    unsigned int maxPiecesPerItem, maxTypesOfProducts, maxWeightOfItem;
+    unsigned int maxPiecesPerItem, maxItems, maxTypesOfProducts, maxWeightOfItem;
     void loadConfiguration();
 } config;
 

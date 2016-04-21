@@ -4,7 +4,6 @@
 #include "Helpers.hpp"
 
 using Products = std::vector < Product >;
-using Requests = std::vector < std::vector < Individual > >;
 
 class WarehouseOptimization
 {
