@@ -1,19 +1,15 @@
 #pragma once
 
+#include "Product.hpp"
+#include "Requests.hpp"
 #include <vector>
 #include <unordered_map>
-
-struct Item
-{
-    unsigned int productId;
-    int amount;
-};
-using Requests = std::vector < std::vector < Item > >;
 
 class Individual
 {
     public:
-        unsigned int calculateFitnessFunction(Requests request);
+        Individual();
+        unsigned int calculateFitnessFunction(const Requests & requests, const Products & products);
 
         Item operator[](const unsigned int & index) const;
         Item& operator[](unsigned int index);
@@ -23,6 +19,12 @@ class Individual
 
     private:
         std::unordered_map <unsigned int, Item > individual;
+        int penalty;
+        int fitnessValue;
+
+        void increasePenalty();
+        void updateBaseOnItem(const Item & item);
+        void createNewItemFromRequest(const Item & item);
         Individual lessRequests(const Requests & requests) const;
 };
 

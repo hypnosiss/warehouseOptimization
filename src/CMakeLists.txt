@@ -3,4 +3,5 @@ add_library(Algorithm    Population.cpp
                          Configuration.cpp
                          Helpers.cpp
                          Individual.cpp
+                         Requests.cpp
            )

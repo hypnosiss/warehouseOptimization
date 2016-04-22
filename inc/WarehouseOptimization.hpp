@@ -1,10 +1,9 @@
 #pragma once
 #include "Population.hpp"
 #include "Product.hpp"
+#include "Requests.hpp"
 #include "Helpers.hpp"
-
-using Products = std::vector < Product >;
-
+//todo: add load and save from file requests + same for products
 class WarehouseOptimization
 {
     public:
