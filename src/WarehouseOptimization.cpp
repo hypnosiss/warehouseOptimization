@@ -1,13 +1,25 @@
 #include "WarehouseOptimization.hpp"
 #include "Configuration.hpp"
 #include "Helpers.hpp"
+#include <string>
+#include <iostream>
 
-void WarehouseOptimization::generateProducts()
+WarehouseOptimization::WarehouseOptimization()
 {
-    products.clear();
-    for (unsigned int i; i < config.maxTypesOfProducts; i++)
+    srand(time(NULL));  
+}
+void WarehouseOptimization::perform()
+{
+    try{
+        products.generate();
+        products.loadFromFile("products_database.txt");
+        requests.generate();
+        requests.loadFromFile("requests_database.txt");
+        population.generate();
+        population.loadFromFile("population_database.txt");
+        population.calculateFitnessFunctions(requests, products);
+    } catch (std::string e)
     {
-        unsigned int weight = static_cast<unsigned int>(Helpers::getRandNumber(0, config.maxWeightOfItem));
-        products.push_back(Product{.weight=weight});
+        std::cout << e << std::endl;
     }
 }

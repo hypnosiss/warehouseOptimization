@@ -4,4 +4,5 @@ add_library(Algorithm    Population.cpp
                          Helpers.cpp
                          Individual.cpp
                          Requests.cpp
+                         Products.cpp
            )

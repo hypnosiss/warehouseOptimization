@@ -1,23 +1,31 @@
 #include "Individual.hpp"
+#include "Helpers.hpp"
 #include "Configuration.hpp"
+#include <iostream>
+#include <algorithm>
 
 Individual::Individual():penalty(0)
 {
-
+    searchListOfProductsIds.resize(config.amountOfTypesOfProducts);
+    unsigned int index=0;
+    for_each(searchListOfProductsIds.begin(), searchListOfProductsIds.end(), 
+                  [&index](unsigned int &x) { x=index++; });
 }
 
 unsigned int Individual::calculateFitnessFunction(const Requests & requests, const Products & products)
 {
     Individual updatedIndividual = lessRequests(requests);
+    std::cout << "OriginalIndividual=" << getSize() << ",updatedIndividual="<<updatedIndividual.getSize() << std::endl;
     int tmpFitnessValue=0;
     
     for (const auto & pair : updatedIndividual.individual)
     {
         const Item & item = pair.second;
         const Product & product = products[item.productId];
-        tmpFitnessValue += item.amount * static_cast<int>(product.weight); 
+        if (item.amount > 0)
+            tmpFitnessValue += item.amount*static_cast<int>(product.weight); 
     }
-
+    std::cout << "penalty="<<updatedIndividual.penalty << std::endl;
     tmpFitnessValue -= updatedIndividual.penalty;
 
     fitnessValue = tmpFitnessValue;
@@ -81,8 +89,22 @@ Item& Individual::operator[](unsigned int index)
 
 bool Individual::isItemExists(unsigned int id) const// TODO: test it
 {
+    //if (individual.size() <= 0 )
+      //  return false;
+
     auto t = individual.find(id);
     return (t != individual.end());
+}
+
+unsigned int Individual::getRandProductId()
+{
+    unsigned int randomNumber = static_cast<unsigned int>(Helpers::getRandNumber(0, searchListOfProductsIds.size()));
+    std::list<unsigned int>::iterator randomElement = searchListOfProductsIds.begin();
+    std::advance(randomElement, randomNumber);
+
+    unsigned int productId = *randomElement;
+    searchListOfProductsIds.erase(randomElement);
+    return productId;
 }
 
 void Individual::addItem(unsigned int id, const Item & item)
@@ -93,4 +115,16 @@ void Individual::addItem(unsigned int id, const Item & item)
 unsigned int Individual::getSize() const
 {
     return individual.size();
+}
+
+std::ostream & operator << (std::ostream &os, const Individual & ind)
+{
+    os << ind.getSize() << " ";
+    for (const auto & pair : ind.individual)
+    {
+        Item item = pair.second;
+        os << item.productId << " " << item.amount << " ";
+    }
+    os << std::endl;
+    return os;
 }

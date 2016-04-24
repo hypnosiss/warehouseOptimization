@@ -4,21 +4,19 @@
 #include <iostream>
 #include <fstream>
 
-void Population::generate(unsigned int amountOfPopulation)
+void Population::generate()
 {
-    if (0 == amountOfPopulation)
+    if (0 == config.amountOfPopulation)
         throw std::string("The population cannot consist of zero individuals");
 
     population.clear();
-    for(unsigned int i=0; i < amountOfPopulation; i++)
+    for(unsigned int i=0; i < config.amountOfPopulation; i++)
     {
-        unsigned int amountOfItems = static_cast<unsigned int>(Helpers::getRandNumber(0, config.maxItems));
+        unsigned int amountOfItems = static_cast<unsigned int>(Helpers::getRandNumber(config.minItemsInIndividual, config.maxItemsInIndividual));
         Individual individual;
         for (unsigned int j=0; j < amountOfItems; j++)
         {
-            unsigned int productId;
-            do productId = static_cast<unsigned int>(Helpers::getRandNumber(0, config.maxTypesOfProducts));
-            while (!individual.isItemExists(productId));
+            unsigned int productId = individual.getRandProductId();
 
             int amount = Helpers::getRandNumber(0, config.maxPiecesPerItem);
             individual.addItem(productId, Item{.productId=productId, .amount=amount});
@@ -27,30 +25,41 @@ void Population::generate(unsigned int amountOfPopulation)
     }      
 }
 
+void Population::calculateFitnessFunctions(const Requests & requests, const Products & products)
+{
+    for (Individual & ind: population)
+    {
+        unsigned int value = ind.calculateFitnessFunction(requests, products);
+        std::cout << "valueC: " << value << std::endl;
+    }
+   /*
+        unsigned int value = population[0].calculateFitnessFunction(requests, products);
+        std::cout << "value: "<< value << std::endl;;
+
+        value = population[1].calculateFitnessFunction(requests, products);
+        std::cout << "value2 " << value << std::endl;
+   */
+    std::cout << std::endl;
+}
+
 void Population::saveToFile(std::string fileName)
 {
-    std::fstream file(fileName);
+    std::ofstream file(fileName);
     file << population.size() << std::endl;
     for(const Individual & ind : population)
     {
-        file << ind.getSize() << " ";
-        for (unsigned int i=0; i<ind.getSize(); i++)
-        {
-            Item item = ind[i];
-            file << item.productId << " " << item.amount << " ";
-        }
-        file << std::endl;
+        file << ind;
     }
+    file.close();
 }
 
 void Population::loadFromFile(std::string fileName)
 {
-    std::fstream file(fileName);
+    std::ifstream file(fileName);
 
     population.clear();
-    unsigned int amountOfPopulation;
-    file >> amountOfPopulation;
-    for (unsigned int i=0; i<amountOfPopulation; i++)
+    file >> config.amountOfPopulation;
+    for (unsigned int i=0; i<config.amountOfPopulation; i++)
     {
         unsigned int numberOfItems;
         file >> numberOfItems;
@@ -64,6 +73,7 @@ void Population::loadFromFile(std::string fileName)
         }
         population.push_back(ind);
     }
+    file.close();
 }
 
 

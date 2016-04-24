@@ -1,8 +1,10 @@
 #pragma once
 
-#include "Product.hpp"
+#include "Products.hpp"
 #include "Requests.hpp"
 #include <vector>
+#include <list>
+#include <fstream>
 #include <unordered_map>
 
 class Individual
@@ -16,9 +18,11 @@ class Individual
         void addItem(unsigned int id, const Item & item);
         unsigned int getSize() const;
         bool isItemExists(unsigned int id) const;
+        unsigned int getRandProductId();
 
     private:
         std::unordered_map <unsigned int, Item > individual;
+        std::list <unsigned int> searchListOfProductsIds;
         int penalty;
         int fitnessValue;
 
@@ -26,5 +30,6 @@ class Individual
         void updateBaseOnItem(const Item & item);
         void createNewItemFromRequest(const Item & item);
         Individual lessRequests(const Requests & requests) const;
+        friend std::ostream & operator << (std::ostream &os, const Individual & ind);
 };
 

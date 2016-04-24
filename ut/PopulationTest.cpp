@@ -24,8 +24,9 @@ class PopulationTest: public testing::Test
         virtual void SetUp()
         {
             config.maxPiecesPerItem = 10;
-            config.maxTypesOfProducts = 11;
+            config.amountOfTypesOfProducts = 11;
             config.maxWeightOfItem = 12;
+            config.amountOfPopulation = 2;
             amountOfPopulation = 1;
             productId = 1;
             amount = 2;
@@ -39,7 +40,8 @@ class PopulationTest: public testing::Test
 
 TEST_F(PopulationTest, DontGenerateEmptyPopulation)
 {
-    ASSERT_THROW(population.generate(0), std::string);
+    config.amountOfPopulation = 0;
+    ASSERT_THROW(population.generate(), std::string);
 }
 /*
 TEST_F(PopulationTest, GenerateNotEmptyPopulation)
