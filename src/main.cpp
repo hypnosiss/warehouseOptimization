@@ -26,8 +26,10 @@ void loadConfiguration()
     config.minItemsInRequest = 6;
     //config.maxTypesOfProducts = 
     config.maxPiecesPerItemInRequest = 5;
-
+    
+    //Algorithm
     config.penalty = 2;
+    config.individualsInGroup = 7;
 
     if (config.maxItemsInIndividual >= config.amountOfTypesOfProducts)
         throw std::string("MaxItemsInIndividual cannot be higher than number of products");

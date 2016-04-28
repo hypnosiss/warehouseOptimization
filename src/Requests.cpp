@@ -33,7 +33,7 @@ void Requests::generate()
             unsigned int productId;
             do 
             {//todo: may freeze
-                productId = static_cast<unsigned int>(Helpers::getRandNumber(0, config.amountOfTypesOfProducts));
+                productId = static_cast<unsigned int>(Helpers::getRandNumber(0, config.amountOfTypesOfProducts-1));
             }
             while (isItemExists(ids, productId));
             ids.push_back(productId);

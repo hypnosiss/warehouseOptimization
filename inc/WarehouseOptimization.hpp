@@ -3,7 +3,9 @@
 #include "Products.hpp"
 #include "Requests.hpp"
 #include "Helpers.hpp"
-//todo: add load and save from file requests + same for products
+
+enum SelectionMethod { ROULETTE, TOURNAMENT };
+
 class WarehouseOptimization
 {
     public:
@@ -14,4 +16,6 @@ class WarehouseOptimization
         Requests requests;
 
         Products products;
+        void selection(SelectionMethod sm);
+        void crossing();
 };

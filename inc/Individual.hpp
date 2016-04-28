@@ -17,6 +17,7 @@ class Individual
         Item& operator[](unsigned int index);
         void addItem(unsigned int id, const Item & item);
         unsigned int getSize() const;
+        int getFitnessValue() const;
         bool isItemExists(unsigned int id) const;
         unsigned int getRandProductId();
 

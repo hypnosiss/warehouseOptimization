@@ -4,6 +4,49 @@
 #include <iostream>
 #include <fstream>
 
+void Population::selection(SelectionOperator *selection)
+{
+    selection->perform(population);
+}
+
+void Population::crossing()
+{
+    std::vector < Individual > newPopulation(config.amountOfPopulation);
+
+    for (unsigned int i=0; i < config.amountOfPopulation; i++)
+    {
+        int firstParentId, secondParentId;
+        do {
+            firstParentId = Helpers::getRandNumber(0, config.amountOfPopulation-1);
+            secondParentId = Helpers::getRandNumber(0, config.amountOfPopulation-1);
+        } while (firstParentId == secondParentId);
+
+        unsigned int breakPoint = config.amountOfTypesOfProducts/2;
+        Individual ind;
+        const Individual & firstParent = population[firstParentId];
+        const Individual & secondParent = population[secondParentId];
+
+        for (unsigned int j=0; j < breakPoint; j++)
+        {
+            if (!firstParent.isItemExists(j)) continue;
+
+            unsigned int productId = firstParent[j].productId;
+            ind.addItem(productId, firstParent[j]);
+        }
+        
+        for (unsigned int j=breakPoint; j < config.amountOfTypesOfProducts; j++)
+        {
+            if (!secondParent.isItemExists(j)) continue;
+
+            unsigned int productId = secondParent[j].productId;
+            ind.addItem(productId, secondParent[j]);
+        }
+        newPopulation.push_back(ind);
+    }
+    population.clear();
+    population = newPopulation;
+}
+
 void Population::generate()
 {
     if (0 == config.amountOfPopulation)
@@ -18,7 +61,7 @@ void Population::generate()
         {
             unsigned int productId = individual.getRandProductId();
 
-            int amount = Helpers::getRandNumber(0, config.maxPiecesPerItem);
+            int amount = Helpers::getRandNumber(1, config.maxPiecesPerItem);
             individual.addItem(productId, Item{.productId=productId, .amount=amount});
         }
         population.push_back(individual);
@@ -30,7 +73,9 @@ void Population::calculateFitnessFunctions(const Requests & requests, const Prod
     for (Individual & ind: population)
     {
         unsigned int value = ind.calculateFitnessFunction(requests, products);
+#if DEBUG==1
         std::cout << "valueC: " << value << std::endl;
+#endif
     }
    /*
         unsigned int value = population[0].calculateFitnessFunction(requests, products);

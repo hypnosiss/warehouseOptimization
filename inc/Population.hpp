@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include "Individual.hpp"
+#include "SelectionOperator.hpp"
 
 class Population
 {
@@ -10,6 +11,8 @@ class Population
         void calculateFitnessFunctions(const Requests & requests, const Products & products);
         void loadFromFile(std::string fileName);
         void saveToFile(std::string fileName);
+        void selection(SelectionOperator *selection);
+        void crossing();
     protected:
         std::vector < Individual > population;
 };
