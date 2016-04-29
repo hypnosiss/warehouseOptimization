@@ -15,6 +15,9 @@ extern struct Configuration
     //Algorithm
     int penalty;
     unsigned int individualsInGroup;
+    float proportionInSelection;
+    float proportionInMutation;
+
     void loadConfiguration();
 } config;
 

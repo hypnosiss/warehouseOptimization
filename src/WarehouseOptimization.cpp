@@ -18,10 +18,13 @@ void WarehouseOptimization::perform()
         requests.loadFromFile("requests_database.txt");
         population.generate();
         population.loadFromFile("population_database.txt");
-        population.calculateFitnessFunctions(requests, products);
 
-        selection(ROULETTE);
-        crossing();
+        for (unsigned int i=0; i < 5; i++)
+        {
+            selection(ROULETTE);
+            crossing();
+            mutation();
+        }
     } catch (std::string e)
     {
         std::cout << e << std::endl;
@@ -30,6 +33,7 @@ void WarehouseOptimization::perform()
 
 void WarehouseOptimization::selection(SelectionMethod sm)
 {
+    population.calculateFitnessFunctions(requests, products);
     SelectionOperator * selectionOperator = NULL;
     switch(sm)
     {
@@ -45,4 +49,9 @@ void WarehouseOptimization::selection(SelectionMethod sm)
 void WarehouseOptimization::crossing()
 {
     population.crossing();       
+}
+
+void WarehouseOptimization::mutation()
+{
+
 }

@@ -18,6 +18,7 @@ class Individual
         void addItem(unsigned int id, const Item & item);
         unsigned int getSize() const;
         int getFitnessValue() const;
+        bool isActive;
         bool isItemExists(unsigned int id) const;
         unsigned int getRandProductId();
 

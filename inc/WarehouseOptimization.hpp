@@ -18,4 +18,5 @@ class WarehouseOptimization
         Products products;
         void selection(SelectionMethod sm);
         void crossing();
+        void mutation();
 };

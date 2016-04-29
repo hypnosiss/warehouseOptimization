@@ -4,7 +4,7 @@
 #include <iostream>
 #include <algorithm>
 
-Individual::Individual():penalty(0)
+Individual::Individual(): isActive(true), penalty(0)
 {
     searchListOfProductsIds.resize(config.amountOfTypesOfProducts);
     unsigned int index=0;
@@ -33,7 +33,8 @@ unsigned int Individual::calculateFitnessFunction(const Requests & requests, con
     tmpFitnessValue -= updatedIndividual.penalty;
 
     fitnessValue = tmpFitnessValue;
-    return fitnessValue;
+    std::cout << "Fitness Value1: " << fitnessValue;
+    return static_cast<unsigned int>(fitnessValue);
 }
 
 int Individual::getFitnessValue() const

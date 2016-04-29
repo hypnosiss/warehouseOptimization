@@ -11,14 +11,14 @@ void Population::selection(SelectionOperator *selection)
 
 void Population::crossing()
 {
-    std::vector < Individual > newPopulation(config.amountOfPopulation);
-
-    for (unsigned int i=0; i < config.amountOfPopulation; i++)
+    unsigned int sizeOfPopulation = population.size();
+    unsigned int numberOfOffsprings = config.amountOfPopulation - sizeOfPopulation;
+    for (unsigned int i=0; i < numberOfOffsprings; i++)
     {
         int firstParentId, secondParentId;
         do {
-            firstParentId = Helpers::getRandNumber(0, config.amountOfPopulation-1);
-            secondParentId = Helpers::getRandNumber(0, config.amountOfPopulation-1);
+            firstParentId = Helpers::getRandNumber(0, sizeOfPopulation-1);
+            secondParentId = Helpers::getRandNumber(0, sizeOfPopulation-1);
         } while (firstParentId == secondParentId);
 
         unsigned int breakPoint = config.amountOfTypesOfProducts/2;
@@ -41,10 +41,30 @@ void Population::crossing()
             unsigned int productId = secondParent[j].productId;
             ind.addItem(productId, secondParent[j]);
         }
-        newPopulation.push_back(ind);
+        population.push_back(ind);
     }
-    population.clear();
-    population = newPopulation;
+
+    if (population.size() != config.amountOfPopulation)
+        throw std::string("Wrong population size after crossing");
+}
+
+void Population::mutation()
+{
+    unsigned int numberOfIndividuals = config.amountOfPopulation * config.proportionInMutation;
+    for (unsigned int i=0; i < numberOfIndividuals; i++)
+    {
+        unsigned int indNr = static_cast<unsigned int>(Helpers::getRandNumber(0, config.amountOfPopulation-1));
+        Individual & ind = population[indNr];
+        unsigned int productId;
+        do
+        {
+            productId = static_cast<unsigned int>(Helpers::getRandNumber(0, config.amountOfTypesOfProducts-1));
+        } while (ind.isItemExists(productId));
+
+        unsigned int itemNr = static_cast<unsigned int>(Helpers::getRandNumber(0, ind.getSize()-1));
+        int amount = Helpers::getRandNumber(1, config.maxPiecesPerItem);
+        ind[itemNr].amount = amount;
+    }
 }
 
 void Population::generate()

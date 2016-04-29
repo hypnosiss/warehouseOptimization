@@ -17,19 +17,21 @@ void loadConfiguration()
     config.maxPiecesPerItem = 20;
 
     //Products
-    config.amountOfTypesOfProducts = 21;
+    config.amountOfTypesOfProducts = 31;
     config.maxWeightOfItem = 10;
 
     //Requests
     config.amountOfRequests = 5;
-    config.maxItemsInRequest = 10;
-    config.minItemsInRequest = 6;
+    config.maxItemsInRequest = 6;
+    config.minItemsInRequest = 4;
     //config.maxTypesOfProducts = 
     config.maxPiecesPerItemInRequest = 5;
     
     //Algorithm
     config.penalty = 2;
-    config.individualsInGroup = 7;
+    //config.individualsInGroup = 7;
+    config.proportionInSelection = 0.40;
+    config.proportionInMutation = 0.10;
 
     if (config.maxItemsInIndividual >= config.amountOfTypesOfProducts)
         throw std::string("MaxItemsInIndividual cannot be higher than number of products");

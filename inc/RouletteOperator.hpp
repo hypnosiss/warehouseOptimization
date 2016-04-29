@@ -11,6 +11,6 @@ class RouletteOperator : public SelectionOperator
 
     private:
         std::vector < Individual > * population;
-        int average;
+        int total;
         const Individual & pickUpNewIndividual();
 };
