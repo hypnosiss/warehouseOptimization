@@ -31,7 +31,7 @@ void loadConfiguration()
     config.penalty = 2;
     //config.individualsInGroup = 7;
     config.proportionInSelection = 0.40;
-    config.proportionInMutation = 0.10;
+    config.proportionInMutation = 0.05;
 
     if (config.maxItemsInIndividual >= config.amountOfTypesOfProducts)
         throw std::string("MaxItemsInIndividual cannot be higher than number of products");

@@ -51,6 +51,7 @@ void Population::crossing()
 void Population::mutation()
 {
     unsigned int numberOfIndividuals = config.amountOfPopulation * config.proportionInMutation;
+    std::cout << numberOfIndividuals << " individuals are having mutation" << std::endl;
     for (unsigned int i=0; i < numberOfIndividuals; i++)
     {
         unsigned int indNr = static_cast<unsigned int>(Helpers::getRandNumber(0, config.amountOfPopulation-1));
@@ -59,11 +60,10 @@ void Population::mutation()
         do
         {
             productId = static_cast<unsigned int>(Helpers::getRandNumber(0, config.amountOfTypesOfProducts-1));
-        } while (ind.isItemExists(productId));
+        } while (!ind.isItemExists(productId));
 
-        unsigned int itemNr = static_cast<unsigned int>(Helpers::getRandNumber(0, ind.getSize()-1));
         int amount = Helpers::getRandNumber(1, config.maxPiecesPerItem);
-        ind[itemNr].amount = amount;
+        ind[productId].amount = amount;
     }
 }
 

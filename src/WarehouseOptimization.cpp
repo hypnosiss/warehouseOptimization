@@ -53,5 +53,5 @@ void WarehouseOptimization::crossing()
 
 void WarehouseOptimization::mutation()
 {
-
+    population.mutation();
 }
