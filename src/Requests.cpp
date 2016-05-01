@@ -15,6 +15,11 @@ std::vector < Item >  Requests::operator[](int i) const
     return requests[i];
 }
 
+void Requests::addVectorOfItems(const std::vector<Item> & items)
+{
+    requests.push_back(items);
+}
+
 unsigned int Requests::getSize() const
 {
     return requests.size();
@@ -48,6 +53,8 @@ void Requests::generate()
 
 void Requests::loadFromFile(std::string fileName)
 {
+    for (std::vector <Item> & items : requests)
+        items.clear();
     requests.clear();
     std::ifstream file(fileName);
     file >> config.amountOfRequests;

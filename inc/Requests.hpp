@@ -13,6 +13,7 @@ class Requests
         void generate();
         void loadFromFile(std::string fileName);
         void saveToFile(std::string fileName) const;
+        void addVectorOfItems(const std::vector<Item> &items);
     private:
         std::vector < std::vector < Item > > requests;        
         bool isItemExists(const std::vector<unsigned int> & request, unsigned int id);

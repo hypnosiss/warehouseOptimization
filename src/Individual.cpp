@@ -50,7 +50,7 @@ Individual Individual::lessRequests(const Requests & requests) const
         const std::vector < Item > & items = requests[i];
 
         for (const Item & itemFromRequest: items)
-        {   
+        {
             if (!ind.isItemExists(itemFromRequest.productId))
             {
                 ind.createNewItemFromRequest(itemFromRequest);
