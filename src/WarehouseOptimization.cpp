@@ -27,7 +27,6 @@ void WarehouseOptimization::perform()
         unsigned int requestsFromId=0;
         unsigned int requestsToId=0;
         std::cout << "Number of requests " << requests.getSize() << std::endl;
-        unsigned int a =0;
         while (requestsToId < config.amountOfRequests)
         {
             std::cout << "Iteration in group: " << nmbOfIterInGroup << ", delivery: " << numberOfDelivery << std::endl;
@@ -36,10 +35,13 @@ void WarehouseOptimization::perform()
             std::cout << "Group from " << requestsFromId << " to " << requestsToId << std::endl;
             Requests groupOfRequests = createGroupOfRequests(requestsFromId, requestsToId);
             std::cout << "Number of requests in group " << groupOfRequests.getSize() << std::endl;
-            calculateFitness(groupOfRequests);
-            selection(ROULETTE);
-            crossing();
-            mutation();
+            for (unsigned int i=0; i < config.numberOfIterations; i++)
+            {
+                calculateFitness(groupOfRequests);
+                selection(ROULETTE);
+                crossing();
+                mutation();
+            }
 
             if (supplyFrequency == nmbOfIterInGroup)
             {
@@ -48,7 +50,6 @@ void WarehouseOptimization::perform()
             }
             else
                 nmbOfIterInGroup++;
-            a++;
         }
     } catch (std::string e)
     {
@@ -68,7 +69,8 @@ Requests WarehouseOptimization::createGroupOfRequests(unsigned int from, unsigne
 
 void WarehouseOptimization::calculateFitness(const Requests & _requests)
 {
-    population.calculateFitnessFunctions(_requests, products);
+    unsigned int total = population.calculateFitnessFunctions(_requests, products);
+    std::cout << "Total fitness function in current population = " << total << std::endl;
 }
 
 void WarehouseOptimization::selection(SelectionMethod sm)

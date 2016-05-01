@@ -18,6 +18,7 @@ extern struct Configuration
     float proportionInSelection;
     float proportionInMutation;
     unsigned int numberOfDeliveries;
+    unsigned int numberOfIterations;
 
     void loadConfiguration();
 } config;

@@ -17,9 +17,11 @@ void RouletteOperator::perform(std::vector < Individual > &pop)
     std::vector < Individual > newPopulation;
     newPopulation.reserve(config.amountOfPopulation);
     for_each(population->begin(), population->end(), 
-            [this](const Individual &ind) { if (ind.isActive) total += ind.getFitnessValue(); else throw std::string("Detect non-active individual");});
-
-    std::cout << "Total fitness function in current population = " << total << std::endl;
+            [this](const Individual &ind)
+            { 
+                if (ind.isActive) total += ind.getFitnessValue(); 
+                else throw std::string("Detect non-active individual");
+            });
     
     unsigned int sizeOfNewPopulation = config.amountOfPopulation*config.proportionInSelection;
     for (unsigned int i=0; i < sizeOfNewPopulation ; i++)

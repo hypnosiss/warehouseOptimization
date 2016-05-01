@@ -88,15 +88,18 @@ void Population::generate()
     }      
 }
 
-void Population::calculateFitnessFunctions(const Requests & requests, const Products & products)
+unsigned int Population::calculateFitnessFunctions(const Requests & requests, const Products & products)
 {
+    unsigned int total = 0;
     for (Individual & ind: population)
     {
         unsigned int value = ind.calculateFitnessFunction(requests, products);
 #if DEBUG==1
-        std::cout << "valueC: " << value << std::endl;
+        std::cout << " casted: " << value << std::endl;
 #endif
+        total += value;
     }
+    return total;
    /*
         unsigned int value = population[0].calculateFitnessFunction(requests, products);
         std::cout << "value: "<< value << std::endl;;
