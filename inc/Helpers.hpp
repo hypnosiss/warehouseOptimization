@@ -13,10 +13,13 @@ class Helpers
     class StopWatch
     {
         public:
-            StopWatch(std::string name); //start counting time
+            StopWatch(std::string name);
+            StopWatch(PrintSeverity ps, std::string name); 
             ~StopWatch();
         private:
             std::clock_t start;
             std::string name;
+            PrintSeverity ps;
+            bool isPs;
     };
 };

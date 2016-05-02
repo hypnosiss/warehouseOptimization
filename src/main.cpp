@@ -11,30 +11,32 @@ using namespace std;
 void loadConfiguration()
 {
     //Population
-    config.amountOfPopulation = 30;
-    config.maxItemsInIndividual = 20;
-    config.minItemsInIndividual = 5;
-    config.maxPiecesPerItem = 20;
+    config.amountOfPopulation = 100; // Ilosc osobnikow
+    config.maxItemsInIndividual = 199; // Max ilosc typow produktow u osobnika
+    config.minItemsInIndividual = 100; // Min ilosc typow produktow u osobnika
+    config.maxPiecesPerItem = 20; // Max liczba sztuk danego produktu u osobnika
 
     //Products
-    config.amountOfTypesOfProducts = 31;
-    config.maxWeightOfItem = 10;
+    config.amountOfTypesOfProducts = 200; // Ilosc typow produktow
+    config.maxWeightOfItem = 100; // Max waga produktu
 
     //Requests
-    config.amountOfRequests = 20;
-    config.maxItemsInRequest = 6;
-    config.minItemsInRequest = 4;
+    config.amountOfRequests = 1000; // Ilosc zadan
+    config.maxItemsInRequest = 20; // Max typow produktow w zadaniu
+    config.minItemsInRequest = 1; // Min typow produktow w zadaniu
     //config.maxTypesOfProducts = 
-    config.maxPiecesPerItemInRequest = 5;
+    config.maxPiecesPerItemInRequest = 50; // Max liczba sztuk daneg produktu w zadaniu
     
     //Algorithm
-    config.penalty = 2;
-    //config.individualsInGroup = 7;
-    config.proportionInSelection = 0.40;
-    config.proportionInMutation = 0.05;
-    config.numberOfDeliveries = 3;
-    config.numberOfIterations = 5;
-    config.iterationsOfNoImprove = 3;
+    config.penalty = 2; // kara
+    config.proportionInSelection = 0.40; // Procent osobnikow produkowanych z selekcji
+    config.proportionInMutation = 0.05; // Procent osobnikow produkowanych z mutacji
+    config.numberOfDeliveries = 100; // Ilosc dostaw
+    config.numberOfIterations = 25; // Ilosc iteracji dla danego zestawu zadan
+    config.iterationsOfNoImprove = 25; // Warunek stopu jesli nie ma poprawy w zestawie zadan
+
+    //Debug
+    config.numberOfStatusInfos = 10; // Ile komunikatow ma byc wyswietlonych
 
     if (config.maxItemsInIndividual >= config.amountOfTypesOfProducts)
         throw std::string("MaxItemsInIndividual cannot be higher than number of products");

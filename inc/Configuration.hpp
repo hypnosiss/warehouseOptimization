@@ -14,16 +14,16 @@ extern struct Configuration
     
     //Algorithm
     int penalty;
-    unsigned int individualsInGroup;
     float proportionInSelection;
     float proportionInMutation;
     unsigned int numberOfDeliveries;
     unsigned int numberOfIterations;
     unsigned int iterationsOfNoImprove;
+    unsigned int numberOfStatusInfos;
     void loadConfiguration();
 } config;
 
-#define DEBUG 1
+#define DEBUG 2
 /* 3 - Only High
  * 2 - High and Medium
  * 1 - High, Medium and Low */

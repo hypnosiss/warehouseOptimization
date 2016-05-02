@@ -9,6 +9,7 @@ class Population
     public:
         void generate();
         unsigned int calculateFitnessFunctions(const Requests & requests, const Products & products);
+        const Individual & getTheBestResult();
         void loadFromFile(std::string fileName);
         void saveToFile(std::string fileName);
         

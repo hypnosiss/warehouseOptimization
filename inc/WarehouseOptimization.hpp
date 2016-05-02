@@ -21,4 +21,8 @@ class WarehouseOptimization
         void selection(SelectionMethod sm);
         void crossing();
         void mutation();
+
+        void loadData();
+        unsigned int calcDeliveryFrequency();
+        void showProgress(unsigned int i);
 };

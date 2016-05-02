@@ -3,6 +3,7 @@
 #include "Helpers.hpp"
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 
 void Population::selection(SelectionOperator *selection)
 {
@@ -86,6 +87,14 @@ void Population::generate()
         }
         population.push_back(individual);
     }      
+}
+
+const Individual & Population::getTheBestResult()
+{
+    auto ind = std::max_element(population.begin(), population.end(),
+                [](const Individual &a, const Individual & b){ return a.getFitnessValue() < b.getFitnessValue(); });
+
+    return *ind;
 }
 
 unsigned int Population::calculateFitnessFunctions(const Requests & requests, const Products & products)

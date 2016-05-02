@@ -53,13 +53,19 @@ void Helpers::print(PrintSeverity ps, const char *fmt, ...)
     va_end(args);
 }
 
-Helpers::StopWatch::StopWatch(std::string name):start(std::clock()), name(name)
+Helpers::StopWatch::StopWatch(std::string name):start(std::clock()), name(name), isPs(false)
 {
-    std::cout << "+++ " << name << " +++" << std::endl; 
+    Helpers::print(Medium, "+++ %s +++", name.c_str());
+}
+
+Helpers::StopWatch::StopWatch(PrintSeverity ps, std::string name):start(std::clock()), name(name), ps(ps), isPs(true)
+{
+    Helpers::print(ps, "+++ %s +++", name.c_str());
 }
 
 Helpers::StopWatch::~StopWatch()
 {
     clock_t total = clock()-start; //get elapsed time
-    std::cout<<"--- "<< name << "(" << double(total)/CLOCKS_PER_SEC<< "secs) ---" << std::endl;
+    const PrintSeverity & myPs = (isPs) ? ps : Medium;
+    Helpers::print(myPs, "--- %s(%f secs) ---", name.c_str(), double(total)/CLOCKS_PER_SEC);
 }
