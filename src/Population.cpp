@@ -51,7 +51,7 @@ void Population::crossing()
 void Population::mutation()
 {
     unsigned int numberOfIndividuals = config.amountOfPopulation * config.proportionInMutation;
-    std::cout << numberOfIndividuals << " individuals are having mutation" << std::endl;
+    Helpers::print(Medium, "%u individuals are having mutation", numberOfIndividuals);
     for (unsigned int i=0; i < numberOfIndividuals; i++)
     {
         unsigned int indNr = static_cast<unsigned int>(Helpers::getRandNumber(0, config.amountOfPopulation-1));
@@ -93,21 +93,12 @@ unsigned int Population::calculateFitnessFunctions(const Requests & requests, co
     unsigned int total = 0;
     for (Individual & ind: population)
     {
-        unsigned int value = ind.calculateFitnessFunction(requests, products);
-#if DEBUG==1
-        std::cout << " casted: " << value << std::endl;
-#endif
-        total += value;
+        int value = ind.calculateFitnessFunction(requests, products);
+        if (value < 0)
+            throw std::string("Fitness function cannot be negative. Probably the configuration is wrong");
+        total += static_cast<unsigned int>(value);
     }
     return total;
-   /*
-        unsigned int value = population[0].calculateFitnessFunction(requests, products);
-        std::cout << "value: "<< value << std::endl;;
-
-        value = population[1].calculateFitnessFunction(requests, products);
-        std::cout << "value2 " << value << std::endl;
-   */
-    std::cout << std::endl;
 }
 
 void Population::saveToFile(std::string fileName)

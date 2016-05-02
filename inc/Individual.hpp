@@ -11,7 +11,7 @@ class Individual
 {
     public:
         Individual();
-        unsigned int calculateFitnessFunction(const Requests & requests, const Products & products);
+        int calculateFitnessFunction(const Requests & requests, const Products & products);
 
         Item operator[](const unsigned int & index) const;
         Item& operator[](unsigned int index);

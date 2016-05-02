@@ -12,29 +12,25 @@ Individual::Individual(): isActive(true), penalty(0)
                   [&index](unsigned int &x) { x=index++; });
 }
 
-unsigned int Individual::calculateFitnessFunction(const Requests & requests, const Products & products)
+int Individual::calculateFitnessFunction(const Requests & requests, const Products & products)
 {
     Individual updatedIndividual = lessRequests(requests);
-#if DEBUG==1
-    std::cout << "OriginalIndividual=" << getSize() << ",updatedIndividual="<<updatedIndividual.getSize() << std::endl;
-#endif
-    int tmpFitnessValue=0;
-    
+    Helpers::print(Low, "Size of individual - BEFORE: %u, AFTER: %u", getSize(), updatedIndividual.getSize());
+
+    fitnessValue=0;
     for (const auto & pair : updatedIndividual.individual)
     {
         const Item & item = pair.second;
         const Product & product = products[item.productId];
         if (item.amount > 0)
-            tmpFitnessValue += item.amount*static_cast<int>(product.weight); 
+            fitnessValue += item.amount*static_cast<int>(product.weight); 
     }
-#if DEBUG==1
-    std::cout << "penalty="<<updatedIndividual.penalty << std::endl;
-#endif
-    tmpFitnessValue -= updatedIndividual.penalty;
+    
+    fitnessValue -= updatedIndividual.penalty;
 
-    fitnessValue = tmpFitnessValue;
-    std::cout << "Fitness Value1: " << fitnessValue;
-    return static_cast<unsigned int>(fitnessValue);
+    Helpers::print(Medium, "Fitness value of individual: %d (including %d penalty)", fitnessValue, updatedIndividual.penalty);
+
+    return fitnessValue;
 }
 
 int Individual::getFitnessValue() const

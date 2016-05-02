@@ -24,4 +24,7 @@ extern struct Configuration
 } config;
 
 #define DEBUG 1
+/* 3 - Only High
+ * 2 - High and Medium
+ * 1 - High, Medium and Low */
 

@@ -20,23 +20,26 @@ void WarehouseOptimization::perform()
         population.generate();
         population.loadFromFile("population_database.txt");
 
+        Helpers::StopWatch sw("PERFORM");
         unsigned int supplyFrequency = static_cast<unsigned int>(config.amountOfRequests/config.numberOfDeliveries);
-        std::cout << "Supply frequency = " << supplyFrequency << std::endl;
+      //  std::cout << "Supply frequency = " << supplyFrequency << std::endl;
+        Helpers::print(Medium, "Supply frequency = %u", supplyFrequency);
         unsigned int nmbOfIterInGroup=1;
         unsigned int numberOfDelivery=0;
         unsigned int requestsFromId=0;
         unsigned int requestsToId=0;
-        std::cout << "Number of requests " << requests.getSize() << std::endl;
+        Helpers::print(Medium, "Total amount of requests = %u", requests.getSize());
         while (requestsToId < config.amountOfRequests)
         {
-            std::cout << "Iteration in group: " << nmbOfIterInGroup << ", delivery: " << numberOfDelivery << std::endl;
+            Helpers::print(Low, "-> %u iteration in group, after %u delivery", nmbOfIterInGroup,  numberOfDelivery);
             requestsFromId = supplyFrequency*(numberOfDelivery);
             requestsToId = supplyFrequency*(numberOfDelivery+1) - 1;
-            std::cout << "Group from " << requestsFromId << " to " << requestsToId << std::endl;
             Requests groupOfRequests = createGroupOfRequests(requestsFromId, requestsToId);
-            std::cout << "Number of requests in group " << groupOfRequests.getSize() << std::endl;
+            Helpers::print(Low, "Group <%u, %u> (%u elements)", requestsFromId, requestsToId, groupOfRequests.getSize());
+            
             for (unsigned int i=0; i < config.numberOfIterations; i++)
             {
+                Helpers::print(Low, "Sub-interation %u/%u", i+1, config.numberOfIterations);
                 calculateFitness(groupOfRequests);
                 selection(ROULETTE);
                 crossing();
@@ -53,7 +56,7 @@ void WarehouseOptimization::perform()
         }
     } catch (std::string e)
     {
-        std::cout << e << std::endl;
+        std::cerr << "=== ! " << e << " ! ===" << std::endl;
     }
 }
 
@@ -69,12 +72,14 @@ Requests WarehouseOptimization::createGroupOfRequests(unsigned int from, unsigne
 
 void WarehouseOptimization::calculateFitness(const Requests & _requests)
 {
+    Helpers::StopWatch measuring("CALCULATE FITNESS FUNCTION");
     unsigned int total = population.calculateFitnessFunctions(_requests, products);
-    std::cout << "Total fitness function in current population = " << total << std::endl;
+    Helpers::print(Medium, "Total fitness function in current population = %u", total);
 }
 
 void WarehouseOptimization::selection(SelectionMethod sm)
 {
+    Helpers::StopWatch measuring("SELECTION");
     SelectionOperator * selectionOperator = NULL;
     switch(sm)
     {
@@ -89,10 +94,12 @@ void WarehouseOptimization::selection(SelectionMethod sm)
 
 void WarehouseOptimization::crossing()
 {
+    Helpers::StopWatch measuring("CROSSING");
     population.crossing();       
 }
 
 void WarehouseOptimization::mutation()
 {
+    Helpers::StopWatch measuring("MUTATION");
     population.mutation();
 }

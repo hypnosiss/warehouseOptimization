@@ -46,9 +46,7 @@ const Individual & RouletteOperator::pickUpNewIndividual()
         fitness -= individualFitness;
         if (fitness <= 0)
         {
-#if DEBUG==1
-            std::cout << "Individual with fitness " << individual.getFitnessValue() << " has been choosen" << std::endl;
-#endif
+            Helpers::print(Medium, "Individual with fitness %u has been choosen", individual.getFitnessValue());
             total -= individual.getFitnessValue();
             individual.isActive = false;
             return individual;
