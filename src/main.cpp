@@ -34,6 +34,7 @@ void loadConfiguration()
     config.proportionInMutation = 0.05;
     config.numberOfDeliveries = 3;
     config.numberOfIterations = 5;
+    config.iterationsOfNoImprove = 3;
 
     if (config.maxItemsInIndividual >= config.amountOfTypesOfProducts)
         throw std::string("MaxItemsInIndividual cannot be higher than number of products");

@@ -16,7 +16,7 @@ class WarehouseOptimization
         Requests requests;
 
         Products products;
-        void calculateFitness(const Requests & _requests);
+        unsigned int calculateFitness(const Requests & _requests);
         Requests createGroupOfRequests(unsigned int from, unsigned int to);
         void selection(SelectionMethod sm);
         void crossing();
