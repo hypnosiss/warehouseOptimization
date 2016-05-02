@@ -29,14 +29,12 @@ void WarehouseOptimization::perform()
         unsigned int nmbOfIterInGroup=1;
         unsigned int numberOfDelivery=0;
         unsigned int requestsFromId=0;
-        unsigned int requestsToId=0;
+        unsigned int requestsToId=supplyFrequency-1;
 
         Helpers::print(Medium, "Total amount of requests = %u", requests.getSize());
         while (requestsToId < config.amountOfRequests )
         {
             Helpers::print(Medium, "-> %u iteration in group, after %u delivery", nmbOfIterInGroup,  numberOfDelivery);
-            requestsFromId = supplyFrequency*(numberOfDelivery);
-            requestsToId = supplyFrequency*(numberOfDelivery+1) - 1;
             Requests groupOfRequests = createGroupOfRequests(requestsFromId, requestsToId);
 
             Helpers::print(Medium, "Group <%u, %u> (%u elements)", requestsFromId, requestsToId, groupOfRequests.getSize());
@@ -63,6 +61,9 @@ void WarehouseOptimization::perform()
                 crossing();
                 mutation();
             }
+            
+            requestsFromId = supplyFrequency*(numberOfDelivery);
+            requestsToId = supplyFrequency*(numberOfDelivery+1) - 1;
 
             if (supplyFrequency == nmbOfIterInGroup)
             {
@@ -72,6 +73,7 @@ void WarehouseOptimization::perform()
             }
             else
                 nmbOfIterInGroup++;
+            
         }
     } catch (std::string e)
     {

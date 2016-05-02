@@ -21,7 +21,7 @@ void loadConfiguration()
     config.maxWeightOfItem = 100; // Max waga produktu
 
     //Requests
-    config.amountOfRequests = 1000; // Ilosc zadan
+    config.amountOfRequests = 200; // Ilosc zadan
     config.maxItemsInRequest = 20; // Max typow produktow w zadaniu
     config.minItemsInRequest = 1; // Min typow produktow w zadaniu
     //config.maxTypesOfProducts = 
