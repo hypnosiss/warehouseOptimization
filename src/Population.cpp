@@ -7,7 +7,25 @@
 
 void Population::selection(SelectionOperator *selection)
 {
+    std::vector <Individual> elite = pickUpElite();
     selection->perform(population);
+    population.insert(population.end(), elite.begin(), elite.end());
+}
+
+std::vector<Individual> Population::pickUpElite() // todo: check
+{
+    std::vector <Individual> elite;
+    std::sort( population.begin( ), population.end( ), [ ]( const Individual& lhs, const Individual& rhs )
+    {
+       return lhs.getFitnessValue() > rhs.getFitnessValue();
+    });
+   unsigned int numberOfIndividuals = static_cast<unsigned int>(config.proportionForElite*population.size());
+   Helpers::print(High, "DEBUG: %u individuals are taken to elite", numberOfIndividuals);
+   for (unsigned int i=0; i<numberOfIndividuals; i++)
+   {
+        elite.push_back(population[i]);
+   }
+   return elite;
 }
 
 void Population::crossing()

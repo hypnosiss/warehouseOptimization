@@ -31,6 +31,7 @@ void loadConfiguration()
     config.penalty = 2; // kara
     config.proportionInSelection = 0.40; // Procent osobnikow produkowanych z selekcji
     config.proportionInMutation = 0.02; // Procent osobnikow produkowanych z mutacji
+    config.proportionForElite = 0.10; // Procent najlepszych osobnikow przechodzacych do pokolenia
     config.numberOfDeliveries = 100; // Ilosc dostaw
     config.numberOfIterations = 50; // Ilosc iteracji dla danego zestawu zadan
     config.iterationsOfNoImprove = 25; // Warunek stopu jesli nie ma poprawy w zestawie zadan

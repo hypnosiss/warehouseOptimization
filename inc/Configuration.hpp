@@ -16,6 +16,7 @@ extern struct Configuration
     int penalty;
     float proportionInSelection;
     float proportionInMutation;
+    float proportionForElite;
     unsigned int numberOfDeliveries;
     unsigned int numberOfIterations;
     unsigned int iterationsOfNoImprove;

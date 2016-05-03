@@ -18,4 +18,5 @@ class Population
         void mutation();
     protected:
         std::vector < Individual > population;
+        std::vector <Individual> pickUpElite();
 };
