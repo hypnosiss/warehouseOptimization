@@ -23,8 +23,4 @@ extern struct Configuration
     void loadConfiguration();
 } config;
 
-#define DEBUG 2
-/* 3 - Only High
- * 2 - High and Medium
- * 1 - High, Medium and Low */
 

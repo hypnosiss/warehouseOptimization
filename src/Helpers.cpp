@@ -6,6 +6,11 @@
 #include <string>
 #include <cstdarg>
 
+#define DEBUG 2
+/* 3 - Only High
+ * 2 - High and Medium
+ * 1 - High, Medium and Low */
+
 int Helpers::getRandNumber(unsigned int from, unsigned int to)
 {
     if (from == to)

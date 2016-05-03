@@ -21,7 +21,7 @@ void loadConfiguration()
     config.maxWeightOfItem = 100; // Max waga produktu
 
     //Requests
-    config.amountOfRequests = 200; // Ilosc zadan
+    config.amountOfRequests = 600; // Ilosc zadan
     config.maxItemsInRequest = 20; // Max typow produktow w zadaniu
     config.minItemsInRequest = 1; // Min typow produktow w zadaniu
     //config.maxTypesOfProducts = 
@@ -30,9 +30,9 @@ void loadConfiguration()
     //Algorithm
     config.penalty = 2; // kara
     config.proportionInSelection = 0.40; // Procent osobnikow produkowanych z selekcji
-    config.proportionInMutation = 0.05; // Procent osobnikow produkowanych z mutacji
+    config.proportionInMutation = 0.02; // Procent osobnikow produkowanych z mutacji
     config.numberOfDeliveries = 100; // Ilosc dostaw
-    config.numberOfIterations = 25; // Ilosc iteracji dla danego zestawu zadan
+    config.numberOfIterations = 50; // Ilosc iteracji dla danego zestawu zadan
     config.iterationsOfNoImprove = 25; // Warunek stopu jesli nie ma poprawy w zestawie zadan
 
     //Debug

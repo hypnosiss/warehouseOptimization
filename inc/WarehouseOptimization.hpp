@@ -3,6 +3,7 @@
 #include "Products.hpp"
 #include "Requests.hpp"
 #include "Helpers.hpp"
+#include <string>
 
 enum SelectionMethod { ROULETTE, TOURNAMENT };
 
@@ -25,4 +26,7 @@ class WarehouseOptimization
         void loadData();
         unsigned int calcDeliveryFrequency();
         void showProgress(unsigned int i);
+        void addCheckPoint(unsigned int a, unsigned int fitness);
+        void saveResults(std::string name);
+        std::string results;
 };
