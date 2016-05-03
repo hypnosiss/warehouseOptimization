@@ -12,26 +12,32 @@ void Population::selection(SelectionOperator *selection)
     population.insert(population.end(), elite.begin(), elite.end());
 }
 
-std::vector<Individual> Population::pickUpElite() // todo: check
+void Population::sort()
 {
-    std::vector <Individual> elite;
     std::sort( population.begin( ), population.end( ), [ ]( const Individual& lhs, const Individual& rhs )
     {
        return lhs.getFitnessValue() > rhs.getFitnessValue();
     });
-   unsigned int numberOfIndividuals = static_cast<unsigned int>(config.proportionForElite*population.size());
-   Helpers::print(High, "DEBUG: %u individuals are taken to elite", numberOfIndividuals);
-   for (unsigned int i=0; i<numberOfIndividuals; i++)
-   {
+}
+
+std::vector<Individual> Population::pickUpElite() // todo: check
+{
+    std::vector <Individual> elite;
+    sort();
+    unsigned int numberOfIndividuals = static_cast<unsigned int>(config.proportionForElite*population.size());
+    Helpers::print(High, "DEBUG: %u individuals are taken to elite", numberOfIndividuals);
+    for (unsigned int i=0; i<numberOfIndividuals; i++)
+    {
         elite.push_back(population[i]);
-   }
-   return elite;
+    }
+    return elite;
 }
 
 void Population::crossing()
 {
     unsigned int sizeOfPopulation = population.size();
     unsigned int numberOfOffsprings = config.amountOfPopulation - sizeOfPopulation;
+    Helpers::print(High, "Size of existing population: %u, will be %u(config:%u)", sizeOfPopulation, numberOfOffsprings, config.amountOfPopulation);
     for (unsigned int i=0; i < numberOfOffsprings; i++)
     {
         int firstParentId, secondParentId;
@@ -107,12 +113,15 @@ void Population::generate()
     }      
 }
 
-const Individual & Population::getTheBestResult()
+void Population::getStatistics(unsigned int &min, unsigned int &average, unsigned int &max)
 {
-    auto ind = std::max_element(population.begin(), population.end(),
-                [](const Individual &a, const Individual & b){ return a.getFitnessValue() < b.getFitnessValue(); });
-
-    return *ind;
+    sort();
+    unsigned int sum=0;
+    min = population.back().getFitnessValue();
+    max = population.front().getFitnessValue();
+    for (const Individual &ind : population)
+        sum += ind.getFitnessValue();
+    average = sum/population.size();
 }
 
 unsigned int Population::calculateFitnessFunctions(const Requests & requests, const Products & products)

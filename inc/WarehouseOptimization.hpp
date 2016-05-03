@@ -26,7 +26,7 @@ class WarehouseOptimization
         void loadData();
         unsigned int calcDeliveryFrequency();
         void showProgress(unsigned int i);
-        void addCheckPoint(unsigned int a, unsigned int fitness);
+        void addCheckPoint(unsigned int a);
         void saveResults(std::string name);
         std::string results;
 };

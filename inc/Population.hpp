@@ -8,8 +8,8 @@ class Population
 {
     public:
         void generate();
+        void getStatistics(unsigned int &min, unsigned int &average, unsigned int &max);
         unsigned int calculateFitnessFunctions(const Requests & requests, const Products & products);
-        const Individual & getTheBestResult();
         void loadFromFile(std::string fileName);
         void saveToFile(std::string fileName);
         
@@ -19,4 +19,5 @@ class Population
     protected:
         std::vector < Individual > population;
         std::vector <Individual> pickUpElite();
+        void sort();
 };

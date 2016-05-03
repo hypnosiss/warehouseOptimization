@@ -82,8 +82,9 @@ void WarehouseOptimization::perform()
     {
         std::cerr << "=== ! " << e << " ! ===" << std::endl;
     }
-    const Individual &ind = population.getTheBestResult();
-    Helpers::print(High, "The best individual with %u ", ind.getFitnessValue());
+    unsigned int min,max,average;
+    population.getStatistics(min, average,max);
+    Helpers::print(High, "Results: The worst:%u, average:%u, The best:%u ", min, average, max);
     saveResults("results.csv");
 }
 
@@ -140,10 +141,16 @@ unsigned int WarehouseOptimization::calcDeliveryFrequency()
     return freq;
 }
 
-void WarehouseOptimization::addCheckPoint(unsigned int a, unsigned int fitness)
+void WarehouseOptimization::addCheckPoint(unsigned int a)
 {
+    unsigned int min,max,average;
+    population.getStatistics(min, average,max);
+
     Helpers::print(High, "Check point nr %u added", a);
-    results+=std::to_string(a) + std::string(", ") + std::to_string(fitness) +std::string("\n");   
+    results+=std::to_string(a) + std::string(", ") + 
+             std::to_string(min) + std::string(", ") +
+             std::to_string(average) + std::string(", ") +
+             std::to_string(max) + std::string("\n");   
 }
 
 void WarehouseOptimization::saveResults(std::string name)
@@ -153,15 +160,15 @@ void WarehouseOptimization::saveResults(std::string name)
     file.close();
 }
 
+
 void WarehouseOptimization::showProgress(unsigned int i)
 {
     unsigned int max = config.numberOfDeliveries;
     unsigned int distanceToShow = max/config.numberOfStatusInfos;
-    const Individual &ind = population.getTheBestResult();
-    addCheckPoint(i, ind.getFitnessValue());
+
+    addCheckPoint(i);
     if (i%distanceToShow == distanceToShow-1)
     {
          Helpers::print(High, "Progress (info %u/%u)", i/distanceToShow+1, config.numberOfStatusInfos);
-         Helpers::print(High, "The best individual = %u ", ind.getFitnessValue());
     }
 }
