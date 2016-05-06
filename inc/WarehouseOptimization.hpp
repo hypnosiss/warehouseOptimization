@@ -17,6 +17,7 @@ class WarehouseOptimization
         Requests requests;
 
         Products products;
+        std::vector <unsigned int> fitnessPerGeneration;
         unsigned int calculateFitness(const Requests & _requests);
         Requests createGroupOfRequests(unsigned int from, unsigned int to);
         void selection(SelectionMethod sm);
@@ -27,6 +28,7 @@ class WarehouseOptimization
         unsigned int calcDeliveryFrequency();
         void showProgress(unsigned int i);
         void addCheckPoint(unsigned int a);
+        void generationChart(unsigned int i);
         void saveResults(std::string name);
         std::string results;
 };

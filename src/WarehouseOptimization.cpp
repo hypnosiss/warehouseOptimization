@@ -26,9 +26,8 @@ void WarehouseOptimization::perform()
 {
     try{
         loadData();
-        Helpers::StopWatch sw(High, "PERFORM");
+        Helpers::StopWatch measuring(High, "PERFORM");
         unsigned int supplyFrequency = calcDeliveryFrequency();
-        unsigned int nmbOfIterInGroup=1;
         unsigned int numberOfDelivery=0;
         unsigned int requestsFromId=0;
         unsigned int requestsToId=supplyFrequency-1;
@@ -36,7 +35,6 @@ void WarehouseOptimization::perform()
         Helpers::print(Medium, "Total amount of requests = %u", requests.getSize());
         while (numberOfDelivery <= config.numberOfDeliveries)//(requestsToId < config.amountOfRequests )
         {
-            Helpers::print(Medium, "-> %u iteration in group, after %u delivery", nmbOfIterInGroup,  numberOfDelivery);
             Requests groupOfRequests = createGroupOfRequests(requestsFromId, requestsToId);
 
             Helpers::print(Medium, "Group <%u, %u> (%u elements)", requestsFromId, requestsToId, groupOfRequests.getSize());
@@ -62,20 +60,16 @@ void WarehouseOptimization::perform()
                 selection(ROULETTE);
                 crossing();
                 mutation();
+                
+                generationChart(i);
             }
             
             requestsFromId = supplyFrequency*(numberOfDelivery);
             requestsToId = supplyFrequency*(numberOfDelivery+1) - 1;
 
-            if (supplyFrequency == nmbOfIterInGroup)
-            {
-                nmbOfIterInGroup=1;
-                numberOfDelivery++;
-                if (numberOfDelivery <= config.numberOfDeliveries)
-                    showProgress(numberOfDelivery);
-            }
-            else
-                nmbOfIterInGroup++;
+            numberOfDelivery++;
+            if (numberOfDelivery <= config.numberOfDeliveries)
+                showProgress(numberOfDelivery);
             
         }
     } catch (std::string e)
@@ -141,6 +135,16 @@ unsigned int WarehouseOptimization::calcDeliveryFrequency()
     return freq;
 }
 
+void WarehouseOptimization::generationChart(unsigned int i)
+{
+    unsigned int min,max,average;
+    population.getStatistics(min, average,max);
+    if (i < fitnessPerGeneration.size())
+        fitnessPerGeneration[i] +=  max;
+    else
+        fitnessPerGeneration.push_back(max);
+}
+
 void WarehouseOptimization::addCheckPoint(unsigned int a)
 {
     unsigned int min,max,average;
@@ -155,9 +159,19 @@ void WarehouseOptimization::addCheckPoint(unsigned int a)
 
 void WarehouseOptimization::saveResults(std::string name)
 {
-    std::ofstream file(name);
-    file << results << std::endl;
-    file.close();
+    std::string nameDeliveries = std::string("D_") + name;
+    std::ofstream file1(nameDeliveries);
+    file1 << results << std::endl;
+    file1.close();
+
+    std::string nameGenerations = std::string("G_") + name;
+    std::ofstream file2(nameGenerations);
+    for (unsigned int i=0; i < fitnessPerGeneration.size(); i++)
+    {
+        file2 << std::to_string(i) + std::string(", ") + 
+                std::to_string(fitnessPerGeneration[i]) + std::string("\n");
+    }
+    file2.close();
 }
 
 
