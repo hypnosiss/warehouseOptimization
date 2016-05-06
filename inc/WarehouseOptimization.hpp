@@ -11,6 +11,7 @@ class WarehouseOptimization
 {
     public:
         WarehouseOptimization();
+        void loadData();
         void perform(); 
     private:
         Population population;
@@ -20,15 +21,16 @@ class WarehouseOptimization
         std::vector <unsigned int> fitnessPerGeneration;
         unsigned int calculateFitness(const Requests & _requests);
         Requests createGroupOfRequests(unsigned int from, unsigned int to);
+        void createGenerations(Requests & groupOfRequests);
+        void createGeneration();
         void selection(SelectionMethod sm);
         void crossing();
         void mutation();
 
-        void loadData();
-        unsigned int calcDeliveryFrequency();
-        void showProgress(unsigned int i);
-        void addCheckPoint(unsigned int a);
-        void generationChart(unsigned int i);
+        unsigned int calculateFrequencyOfForecastsForRequests();
+        void addRowToForecastTypeData();
+        void printStatistics();
+        void addRowToGenerationTypeData(unsigned int generationId);
         void saveResults(std::string name);
-        std::string results;
+        std::string forecastResults;
 };

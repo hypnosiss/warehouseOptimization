@@ -12,30 +12,32 @@ Individual::Individual(): isActive(true), penalty(0)
                   [&index](unsigned int &x) { x=index++; });
 }
 
-int Individual::calculateFitnessFunction(const Requests & requests, const Products & products)
+int Individual::calculateFitnessValue(const Requests & requests, const Products & products)
 {
     Individual updatedIndividual = lessRequests(requests);
-    Helpers::print(Low, "Size of individual - BEFORE: %u, AFTER: %u", getSize(), updatedIndividual.getSize());
+    Helpers::print(Low, "Number of types of products - BEFORE: %u, AFTER: %u", 
+                   getSize(), updatedIndividual.getSize());
 
-    fitnessValue=0;
+    fitness=0;
     for (const auto & pair : updatedIndividual.individual)
     {
         const Item & item = pair.second;
         const Product & product = products[item.productId];
         if (item.amount > 0)
-            fitnessValue += item.amount*static_cast<int>(product.weight); 
+            fitness += item.amount*static_cast<int>(product.weight); 
     }
     
-    fitnessValue -= updatedIndividual.penalty;
+    fitness -= updatedIndividual.penalty;
 
-    Helpers::print(Medium, "Fitness value of individual: %d (including %d penalty)", fitnessValue, updatedIndividual.penalty);
+    Helpers::print(Medium, "Value of individual fitness: %d (including %d penalty)", 
+                   fitness, updatedIndividual.penalty);
 
-    return fitnessValue;
+    return fitness;
 }
 
 int Individual::getFitnessValue() const
 {
-    return fitnessValue;
+    return fitness;
 }
 
 Individual Individual::lessRequests(const Requests & requests) const
@@ -47,13 +49,13 @@ Individual Individual::lessRequests(const Requests & requests) const
 
         for (const Item & itemFromRequest: items)
         {
-            if (!ind.isItemExists(itemFromRequest.productId))
+            if (ind.isItemExists(itemFromRequest.productId))
             {
-                ind.createNewItemFromRequest(itemFromRequest);
+                ind.updateBaseOnItem(itemFromRequest);
             }
             else
             {
-                ind.updateBaseOnItem(itemFromRequest);
+                ind.createNewItemFromRequest(itemFromRequest);
             }
         }
     }
@@ -92,11 +94,8 @@ Item& Individual::operator[](unsigned int index)
     return individual.at(index);
 }
 
-bool Individual::isItemExists(unsigned int id) const// TODO: test it
+bool Individual::isItemExists(unsigned int id) const
 {
-    //if (individual.size() <= 0 )
-      //  return false;
-
     auto t = individual.find(id);
     return (t != individual.end());
 }

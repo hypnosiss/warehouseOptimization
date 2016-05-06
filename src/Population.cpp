@@ -25,7 +25,7 @@ std::vector<Individual> Population::pickUpElite() // todo: check
     std::vector <Individual> elite;
     sort();
     unsigned int numberOfIndividuals = static_cast<unsigned int>(config.proportionForElite*population.size());
-    Helpers::print(High, "DEBUG: %u individuals are taken to elite", numberOfIndividuals);
+    Helpers::print(Low, "%u individuals are taken to elite", numberOfIndividuals);
     for (unsigned int i=0; i<numberOfIndividuals; i++)
     {
         elite.push_back(population[i]);
@@ -37,7 +37,9 @@ void Population::crossing()
 {
     unsigned int sizeOfPopulation = population.size();
     unsigned int numberOfOffsprings = config.amountOfPopulation - sizeOfPopulation;
-    Helpers::print(High, "Size of existing population: %u, will be %u(config:%u)", sizeOfPopulation, numberOfOffsprings, config.amountOfPopulation);
+    Helpers::print(Medium, "Size of existing population: %u/%u, "
+                           "hence %u offsprings will be added", 
+                   sizeOfPopulation, config.amountOfPopulation, numberOfOffsprings);
     for (unsigned int i=0; i < numberOfOffsprings; i++)
     {
         int firstParentId, secondParentId;
@@ -116,20 +118,21 @@ void Population::generate()
 void Population::getStatistics(unsigned int &min, unsigned int &average, unsigned int &max)
 {
     sort();
-    unsigned int sum=0;
     min = population.back().getFitnessValue();
     max = population.front().getFitnessValue();
+    
+    unsigned int sum=0;
     for (const Individual &ind : population)
         sum += ind.getFitnessValue();
     average = sum/population.size();
 }
 
-unsigned int Population::calculateFitnessFunctions(const Requests & requests, const Products & products)
+unsigned int Population::calculateFitnessValues(const Requests & requests, const Products & products)
 {
     unsigned int total = 0;
     for (Individual & ind: population)
     {
-        int value = ind.calculateFitnessFunction(requests, products);
+        int value = ind.calculateFitnessValue(requests, products);
         if (value < 0)
             throw std::string("Fitness function cannot be negative. Probably the configuration is wrong");
         total += static_cast<unsigned int>(value);

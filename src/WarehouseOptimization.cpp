@@ -22,64 +22,78 @@ void WarehouseOptimization::loadData()
         population.saveToFile("population_database.txt");
 }
 
+void WarehouseOptimization::createGeneration()
+{
+    selection(ROULETTE);
+    crossing();
+    mutation();
+}
+
+void WarehouseOptimization::createGenerations(Requests & groupOfRequests)
+{
+    unsigned int previousFitness=0;
+    unsigned int biggerFitnessCounter=0;
+    for (unsigned int i=0; i < config.numberOfGenerations && 
+                           biggerFitnessCounter < config.iterationsOfNoImprove; i++)
+    {
+       
+        unsigned int currentFitness = calculateFitness(groupOfRequests);
+        biggerFitnessCounter = (currentFitness > previousFitness) ? 0 : biggerFitnessCounter+1;
+        if (biggerFitnessCounter == config.iterationsOfNoImprove-1)
+        {
+            Helpers::print(High, "WRN: Did not find improve of fitness value "
+                                 "since %u iterations", 
+                           biggerFitnessCounter+1);
+            break;
+        }
+        previousFitness = currentFitness;
+        
+        Helpers::print(Low, "Generation %u/%u", i+1, config.numberOfGenerations);
+        createGeneration();
+        
+        addRowToGenerationTypeData(i);
+    }
+
+}
+
 void WarehouseOptimization::perform()
 {
-    try{
-        loadData();
-        Helpers::StopWatch measuring(High, "PERFORM");
-        unsigned int supplyFrequency = calcDeliveryFrequency();
-        unsigned int numberOfDelivery=0;
-        unsigned int requestsFromId=0;
-        unsigned int requestsToId=supplyFrequency-1;
+    Helpers::StopWatch measuring(High, "PERFORM");
+    unsigned int forecastFrequency = calculateFrequencyOfForecastsForRequests();
+    unsigned int numberOfForecast=0;
+    unsigned int requestsFromId=0;
+    unsigned int requestsToId=forecastFrequency-1;
 
-        Helpers::print(Medium, "Total amount of requests = %u", requests.getSize());
-        while (numberOfDelivery <= config.numberOfDeliveries)//(requestsToId < config.amountOfRequests )
-        {
-            Requests groupOfRequests = createGroupOfRequests(requestsFromId, requestsToId);
+    Helpers::print(Low, "Total amount of requests = %u", requests.getSize());
 
-            Helpers::print(Medium, "Group <%u, %u> (%u elements)", requestsFromId, requestsToId, groupOfRequests.getSize());
-            
-            int numberOfIterations = config.numberOfIterations - groupOfRequests.getSize();
-            
-            if (numberOfIterations <= 0)
-                throw std::string("Too less number of iterations in configuration file!");
-
-            unsigned int previousFitnessFunction=-1;
-            unsigned int sameFitnessCount=0;
-            
-            for (unsigned int i=0; i < (unsigned int)numberOfIterations && sameFitnessCount < config.iterationsOfNoImprove; i++)
-            {
-                Helpers::print(Low, "Sub-iteration %u/%u", i+1, config.numberOfIterations);
-               
-                unsigned int fitnessFunction = calculateFitness(groupOfRequests);
-                sameFitnessCount = (fitnessFunction > previousFitnessFunction) ? 0 : sameFitnessCount+1;
-                if (sameFitnessCount == config.iterationsOfNoImprove-1)
-                    Helpers::print(High, "WRN: Did not find improve of fitness function since %u iterations", sameFitnessCount+1);
-                previousFitnessFunction = fitnessFunction;
-
-                selection(ROULETTE);
-                crossing();
-                mutation();
-                
-                generationChart(i);
-            }
-            
-            requestsFromId = supplyFrequency*(numberOfDelivery);
-            requestsToId = supplyFrequency*(numberOfDelivery+1) - 1;
-
-            numberOfDelivery++;
-            if (numberOfDelivery <= config.numberOfDeliveries)
-                showProgress(numberOfDelivery);
-            
-        }
-    } catch (std::string e)
+    while (numberOfForecast <= config.numberOfForecasts)
     {
-        std::cerr << "=== ! " << e << " ! ===" << std::endl;
+        Requests groupOfRequests = createGroupOfRequests(requestsFromId, requestsToId);
+
+        Helpers::print(High, "Forecast no.%u -> basing on group of "
+                             "<%u, %u> requests (%u elements)", 
+                       numberOfForecast, requestsFromId, requestsToId, 
+                       groupOfRequests.getSize());
+        
+        createGenerations(groupOfRequests); 
+
+        requestsFromId = forecastFrequency*(numberOfForecast);
+        requestsToId = forecastFrequency*(numberOfForecast+1) - 1;
+
+        numberOfForecast++;
+
+        addRowToForecastTypeData();
+       // if (numberOfForecast <= config.numberOfForecasts)
     }
-    unsigned int min,max,average;
-    population.getStatistics(min, average,max);
-    Helpers::print(High, "Results: The worst:%u, average:%u, The best:%u ", min, average, max);
+    printStatistics();    
     saveResults("results.csv");
+}
+
+void WarehouseOptimization::printStatistics()
+{
+    unsigned int min,max,average;
+    population.getStatistics(min, average, max);
+    Helpers::print(High, "The worst: %u, average: %u, the best: %u ", min, average, max);
 }
 
 Requests WarehouseOptimization::createGroupOfRequests(unsigned int from, unsigned int to)
@@ -95,8 +109,8 @@ Requests WarehouseOptimization::createGroupOfRequests(unsigned int from, unsigne
 unsigned int WarehouseOptimization::calculateFitness(const Requests & _requests)
 {
     Helpers::StopWatch measuring("CALCULATE FITNESS FUNCTION");
-    unsigned int total = population.calculateFitnessFunctions(_requests, products);
-    Helpers::print(Medium, "Total fitness function in current population = %u", total);
+    unsigned int total = population.calculateFitnessValues(_requests, products);
+    Helpers::print(Low, "Total fitness function in current population = %u", total);
     return total;
 }
 
@@ -127,62 +141,47 @@ void WarehouseOptimization::mutation()
     population.mutation();
 }
 
-unsigned int WarehouseOptimization::calcDeliveryFrequency()
+unsigned int WarehouseOptimization::calculateFrequencyOfForecastsForRequests()
 {
-    unsigned int freq = static_cast<unsigned int>(config.amountOfRequests/config.numberOfDeliveries);
-
-    Helpers::print(Low, "Supply frequency = %u", freq);
-    return freq;
+    unsigned int f = static_cast<unsigned int>(config.amountOfRequests/config.numberOfForecasts);
+    Helpers::print(Low, "Frequency of forecasts for all requests is %u", f);
+    return f;
 }
 
-void WarehouseOptimization::generationChart(unsigned int i)
+void WarehouseOptimization::addRowToGenerationTypeData(unsigned int generationId)
 {
     unsigned int min,max,average;
     population.getStatistics(min, average,max);
-    if (i < fitnessPerGeneration.size())
-        fitnessPerGeneration[i] +=  max;
+
+    if (generationId < fitnessPerGeneration.size())
+        fitnessPerGeneration[generationId] +=  max;
     else
         fitnessPerGeneration.push_back(max);
 }
 
-void WarehouseOptimization::addCheckPoint(unsigned int a)
+void WarehouseOptimization::addRowToForecastTypeData()
 {
     unsigned int min,max,average;
     population.getStatistics(min, average,max);
 
-    Helpers::print(High, "Check point nr %u added", a);
-    results+=std::to_string(a) + std::string(", ") + 
-             std::to_string(min) + std::string(", ") +
-             std::to_string(average) + std::string(", ") +
-             std::to_string(max) + std::string("\n");   
+    forecastResults+= std::to_string(min) + std::string(", ") +
+              std::to_string(average) + std::string(", ") +
+              std::to_string(max) + std::string("\n");   
+    Helpers::print(Low, "Checkpoint for forecast data has been added");
 }
 
 void WarehouseOptimization::saveResults(std::string name)
 {
-    std::string nameDeliveries = std::string("D_") + name;
-    std::ofstream file1(nameDeliveries);
-    file1 << results << std::endl;
-    file1.close();
+    std::string nameForForecasts = std::string("F_") + name;
+    std::ofstream fFile(nameForForecasts);
+    fFile << forecastResults << std::endl;
+    fFile.close();
 
-    std::string nameGenerations = std::string("G_") + name;
-    std::ofstream file2(nameGenerations);
+    std::string nameForGenerations = std::string("G_") + name;
+    std::ofstream gFile(nameForGenerations);
     for (unsigned int i=0; i < fitnessPerGeneration.size(); i++)
     {
-        file2 << std::to_string(i) + std::string(", ") + 
-                std::to_string(fitnessPerGeneration[i]) + std::string("\n");
+        gFile << std::to_string(fitnessPerGeneration[i]) + std::string("\n");
     }
-    file2.close();
-}
-
-
-void WarehouseOptimization::showProgress(unsigned int i)
-{
-    unsigned int max = config.numberOfDeliveries;
-    unsigned int distanceToShow = max/config.numberOfStatusInfos;
-
-    addCheckPoint(i);
-    if (i%distanceToShow == distanceToShow-1)
-    {
-         Helpers::print(High, "Progress (info %u/%u)", i/distanceToShow+1, config.numberOfStatusInfos);
-    }
+    gFile.close();
 }

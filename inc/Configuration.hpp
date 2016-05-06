@@ -17,11 +17,11 @@ extern struct Configuration
     float proportionInSelection;
     float proportionInMutation;
     float proportionForElite;
-    unsigned int numberOfDeliveries;
-    unsigned int numberOfIterations;
+    unsigned int numberOfForecasts;
+    unsigned int numberOfGenerations;
     unsigned int iterationsOfNoImprove;
     unsigned int numberOfStatusInfos;
-    void loadConfiguration();
+    void load();
 } config;
 
 

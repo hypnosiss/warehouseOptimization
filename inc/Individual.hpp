@@ -11,7 +11,7 @@ class Individual
 {
     public:
         Individual();
-        int calculateFitnessFunction(const Requests & requests, const Products & products);
+        int calculateFitnessValue(const Requests & requests, const Products & products);
 
         Item operator[](const unsigned int & index) const;
         Item& operator[](unsigned int index);
@@ -26,7 +26,7 @@ class Individual
         std::unordered_map <unsigned int, Item > individual;
         std::list <unsigned int> searchListOfProductsIds;
         int penalty;
-        int fitnessValue;
+        int fitness;
 
         void increasePenalty();
         void updateBaseOnItem(const Item & item);

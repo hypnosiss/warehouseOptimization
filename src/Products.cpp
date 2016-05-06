@@ -19,7 +19,7 @@ void Products::generate()
     products.clear();
     for (unsigned int i=0; i < config.amountOfTypesOfProducts; i++)
     {
-        unsigned int weight = static_cast<unsigned int>(Helpers::getRandNumber(0, config.maxWeightOfItem));
+        unsigned int weight = static_cast<unsigned int>(Helpers::getRandNumber(1, config.maxWeightOfItem));
         products.push_back(Product{.weight=weight});
     }
 }
