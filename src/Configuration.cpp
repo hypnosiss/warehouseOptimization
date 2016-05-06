@@ -1,5 +1,5 @@
 #include "Configuration.hpp"
-#include <string>
+#include <fstream>
 
 Configuration config;
 
@@ -31,12 +31,58 @@ void Configuration::load()
     numberOfGenerations = 50; // Ilosc generacji dla danego zestawu zadan (jednej prognozy)
     iterationsOfNoImprove = 25; // Warunek stopu jesli nie ma poprawy w zestawie zadan
 
-    //Debug
-    numberOfStatusInfos = 10; // Ile komunikatow ma byc wyswietlonych
-
     if (maxItemsInIndividual >= amountOfTypesOfProducts)
         throw std::string("MaxItemsInIndividual cannot be higher than number of products");
 
     if (static_cast<unsigned int>(amountOfRequests/numberOfForecasts) == 0)
         throw std::string("Too big number of forecasts");
 }
+
+void Configuration::saveToFile(std::string fileName)
+{
+    std::ofstream file(fileName);
+    
+    //Population
+    file << amountOfPopulation   << " " << maxItemsInIndividual << " " 
+         << minItemsInIndividual << " " << maxPiecesPerItem << std::endl;
+
+    //Products
+    file << amountOfTypesOfProducts << " " << maxWeightOfItem << std::endl;
+
+    //Requests
+    file << amountOfRequests  << " " << maxItemsInRequest << " "
+         << minItemsInRequest << " " << maxPiecesPerItemInRequest << std::endl;
+
+    //Algorithm
+    file << penalty              << " " << proportionInSelection << " "
+         << proportionInMutation << " " << proportionForElite    << " "
+         << numberOfForecasts    << " " << numberOfGenerations   << " "
+         << iterationsOfNoImprove << std::endl;
+
+    file.close();
+}
+
+void Configuration::loadFromFile(std::string fileName)
+{
+    std::ifstream file(fileName);
+
+    //Population
+    file >> amountOfPopulation   >> maxItemsInIndividual
+         >> minItemsInIndividual >> maxPiecesPerItem;
+
+    //Products
+    file >> amountOfTypesOfProducts >> maxWeightOfItem;
+
+    //Requests
+    file >> amountOfRequests  >> maxItemsInRequest
+         >> minItemsInRequest >> maxPiecesPerItemInRequest;
+
+    //Algorithm
+    file >> penalty              >> proportionInSelection
+         >> proportionInMutation >> proportionForElite
+         >> numberOfForecasts    >> numberOfGenerations
+         >> iterationsOfNoImprove;
+
+    file.close();
+}
+

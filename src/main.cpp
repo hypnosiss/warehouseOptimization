@@ -13,7 +13,8 @@ int main()
     try
     {
         config.load();
-        
+        config.saveToFile("configuration.txt");
+       
         cout << "Warehouse Line-up Optimization" << endl; 
         WarehouseOptimization wo;
        

@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 extern struct Configuration
 {
@@ -20,8 +21,9 @@ extern struct Configuration
     unsigned int numberOfForecasts;
     unsigned int numberOfGenerations;
     unsigned int iterationsOfNoImprove;
-    unsigned int numberOfStatusInfos;
     void load();
+    void saveToFile(std::string fileName);
+    void loadFromFile(std::string fileName);
 } config;
 
 
