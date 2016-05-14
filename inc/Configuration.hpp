@@ -21,6 +21,8 @@ extern struct Configuration
     unsigned int numberOfForecasts;
     unsigned int numberOfGenerations;
     unsigned int iterationsOfNoImprove;
+    unsigned int amountOfGroupsInTournament;
+
     void load();
     void saveToFile(std::string fileName);
     void loadFromFile(std::string fileName);

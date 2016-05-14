@@ -15,7 +15,6 @@ void RouletteOperator::perform(std::vector < Individual > &pop)
 {
     population = &pop;
     std::vector < Individual > newPopulation;
-    newPopulation.reserve(config.amountOfPopulation);
     for_each(population->begin(), population->end(), 
             [this](const Individual &ind)
             { 
@@ -24,6 +23,8 @@ void RouletteOperator::perform(std::vector < Individual > &pop)
             });
     
     unsigned int sizeOfNewPopulation = config.amountOfPopulation*config.proportionInSelection;
+    
+    newPopulation.reserve(sizeOfNewPopulation);
     for (unsigned int i=0; i < sizeOfNewPopulation ; i++)
     {
         const Individual & ind = pickUpNewIndividual();

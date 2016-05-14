@@ -2,6 +2,7 @@
 #include "Configuration.hpp"
 #include "Helpers.hpp"
 #include "RouletteOperator.hpp"
+#include "TournamentOperator.hpp"
 #include <iostream>
 
 WarehouseOptimization::WarehouseOptimization()
@@ -24,7 +25,7 @@ void WarehouseOptimization::loadData()
 
 void WarehouseOptimization::createGeneration()
 {
-    selection(ROULETTE);
+    selection(TOURNAMENT);
     crossing();
     mutation();
 }
@@ -122,6 +123,9 @@ void WarehouseOptimization::selection(SelectionMethod sm)
     {
     case ROULETTE:
         selectionOperator = new RouletteOperator();
+        break;
+    case TOURNAMENT:
+        selectionOperator = new TournamentOperator();
         break;
 
     }

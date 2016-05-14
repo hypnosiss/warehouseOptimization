@@ -6,4 +6,5 @@ add_library(Algorithm    Population.cpp
                          Requests.cpp
                          Products.cpp
                          RouletteOperator.cpp
+                         TournamentOperator.cpp
            )

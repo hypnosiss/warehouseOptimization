@@ -28,8 +28,9 @@ void Configuration::load()
     proportionInMutation = 0.02; // Procent osobnikow produkowanych z mutacji
     proportionForElite = 0.15; // Procent najlepszych osobnikow przechodzacych do pokolenia
     numberOfForecasts = 100; // Ilosc prognoz
-    numberOfGenerations = 50; // Ilosc generacji dla danego zestawu zadan (jednej prognozy)
+    numberOfGenerations = 20; // Ilosc generacji dla danego zestawu zadan (jednej prognozy)
     iterationsOfNoImprove = 25; // Warunek stopu jesli nie ma poprawy w zestawie zadan
+    amountOfGroupsInTournament = 20; 
 
     if (maxItemsInIndividual >= amountOfTypesOfProducts)
         throw std::string("MaxItemsInIndividual cannot be higher than number of products");
@@ -57,7 +58,7 @@ void Configuration::saveToFile(std::string fileName)
     file << penalty              << " " << proportionInSelection << " "
          << proportionInMutation << " " << proportionForElite    << " "
          << numberOfForecasts    << " " << numberOfGenerations   << " "
-         << iterationsOfNoImprove << std::endl;
+         << iterationsOfNoImprove<< " " << amountOfGroupsInTournament <<  std::endl;
 
     file.close();
 }
@@ -81,7 +82,7 @@ void Configuration::loadFromFile(std::string fileName)
     file >> penalty              >> proportionInSelection
          >> proportionInMutation >> proportionForElite
          >> numberOfForecasts    >> numberOfGenerations
-         >> iterationsOfNoImprove;
+         >> iterationsOfNoImprove>> amountOfGroupsInTournament;
 
     file.close();
 }
