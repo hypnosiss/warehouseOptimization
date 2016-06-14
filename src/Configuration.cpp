@@ -8,8 +8,8 @@ void Configuration::load()
     //Population
     amountOfPopulation = 100; // Ilosc osobnikow
     maxItemsInIndividual = 199; // Max ilosc typow produktow u osobnika
-    minItemsInIndividual = 100; // Min ilosc typow produktow u osobnika
-    maxPiecesPerItem = 20; // Max liczba sztuk danego produktu u osobnika
+    minItemsInIndividual = 10; // Min ilosc typow produktow u osobnika
+    maxPiecesPerItem = 100; // Max liczba sztuk danego produktu u osobnika
 
     //Products
     amountOfTypesOfProducts = 200; // Ilosc typow produktow
@@ -20,17 +20,17 @@ void Configuration::load()
     maxItemsInRequest = 20; // Max typow produktow w zadaniu
     minItemsInRequest = 1; // Min typow produktow w zadaniu
     //config.maxTypesOfProducts = 
-    maxPiecesPerItemInRequest = 50; // Max liczba sztuk daneg produktu w zadaniu
+    maxPiecesPerItemInRequest = 50; // Max liczba sztuk danego produktu w zadaniu
     
     //Algorithm
     penalty = 2; // kara
     proportionInSelection = 0.40; // Procent osobnikow produkowanych z selekcji
     proportionInMutation = 0.02; // Procent osobnikow produkowanych z mutacji
     proportionForElite = 0.15; // Procent najlepszych osobnikow przechodzacych do pokolenia
-    numberOfForecasts = 100; // Ilosc prognoz
-    numberOfGenerations = 20; // Ilosc generacji dla danego zestawu zadan (jednej prognozy)
+    numberOfForecasts = 25; // Ilosc prognoz
+    numberOfGenerations = 100; // Ilosc generacji dla danego zestawu zadan (jednej prognozy)
     iterationsOfNoImprove = 25; // Warunek stopu jesli nie ma poprawy w zestawie zadan
-    amountOfGroupsInTournament = 20; 
+    amountOfGroupsInTournament = 20; // Ilosc osobnikow w grupie (dot. turniejowej selekcji)
 
     if (maxItemsInIndividual >= amountOfTypesOfProducts)
         throw std::string("MaxItemsInIndividual cannot be higher than number of products");

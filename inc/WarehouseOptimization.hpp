@@ -13,11 +13,12 @@ class WarehouseOptimization
         WarehouseOptimization();
         void loadData();
         void perform(); 
+        void setCode(std::string code);
     private:
         Population population;
         Requests requests;
         Products products;
-        std::string forecastResults;
+        std::string forecastResults, code;
         std::vector <unsigned int> fitnessPerGeneration;
         
         unsigned int calculateFitness(const Requests & _requests);

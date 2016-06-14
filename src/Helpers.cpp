@@ -6,7 +6,7 @@
 #include <string>
 #include <cstdarg>
 
-#define DEBUG 2
+#define DEBUG 3
 /* 3 - Only High
  * 2 - High and Medium
  * 1 - High, Medium and Low */

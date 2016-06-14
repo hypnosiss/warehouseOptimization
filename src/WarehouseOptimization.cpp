@@ -13,14 +13,14 @@ WarehouseOptimization::WarehouseOptimization()
 void WarehouseOptimization::loadData()
 {
         products.generate();
-     //   products.loadFromFile("products_database.txt");
-        products.saveToFile("products_database.txt");
+        products.loadFromFile("products_database.txt");
+     //   products.saveToFile("products_database.txt");
         requests.generate();
        // requests.loadFromFile("requests_database.txt");
         requests.saveToFile("requests_database.txt");
         population.generate();
-       // population.loadFromFile("population_database.txt");
-        population.saveToFile("population_database.txt");
+        population.loadFromFile("population_database.txt");
+ //       population.saveToFile("population_database.txt");
 }
 
 void WarehouseOptimization::createGeneration()
@@ -84,10 +84,14 @@ void WarehouseOptimization::perform()
         numberOfForecast++;
 
         addRowToForecastTypeData();
-       // if (numberOfForecast <= config.numberOfForecasts)
     }
     printStatistics();    
     saveResults("results.csv");
+}
+
+void WarehouseOptimization::setCode(std::string _code)
+{
+    code = _code;
 }
 
 void WarehouseOptimization::printStatistics()
@@ -176,12 +180,12 @@ void WarehouseOptimization::addRowToForecastTypeData()
 
 void WarehouseOptimization::saveResults(std::string name)
 {
-    std::string nameForForecasts = std::string("F_") + name;
+    std::string nameForForecasts = code + std::string("F_") + name;
     std::ofstream fFile(nameForForecasts);
     fFile << forecastResults << std::endl;
     fFile.close();
 
-    std::string nameForGenerations = std::string("G_") + name;
+    std::string nameForGenerations = code + std::string("G_") + name;
     std::ofstream gFile(nameForGenerations);
     for (unsigned int i=0; i < fitnessPerGeneration.size(); i++)
     {
